@@ -13,7 +13,15 @@
       "backgroundColor": "#7C3AED"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.ani.medimind",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used for profile photos",
+        "NSPhotoLibraryUsageDescription": "Used for profile photos"
+      },
+      "entitlements": {
+        "com.apple.developer.applesignin": ["Default"]
+      }
     },
     "android": {
       "package": "com.ani.medimind",
@@ -46,7 +54,8 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-apple-authentication"
     ],
     "experiments": {
       "typedRoutes": true

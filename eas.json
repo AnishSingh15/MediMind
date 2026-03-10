@@ -23,6 +23,15 @@
     "production": {
       "android": {
         "buildType": "app-bundle"
+      },
+      "ios": {
+        "autoIncrement": true
+      }
+    },
+    "ios-preview": {
+      "ios": {
+        "simulator": false,
+        "distribution": "internal"
       }
     }
   },

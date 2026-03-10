@@ -1,4 +1,6 @@
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Crypto from 'expo-crypto';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import React, { useState } from 'react';
 import {
@@ -13,7 +15,7 @@ import {
 } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import { BorderRadius, Colors, Elevation, Spacing, TouchTarget } from '../constants/theme';
-import { signInWithEmail, signInWithGoogle, signUpWithEmail } from '../services/firebase';
+import { signInWithApple, signInWithEmail, signInWithGoogle, signUpWithEmail } from '../services/firebase';
 
 // Configure Google Sign-In
 GoogleSignin.configure({
@@ -33,6 +35,47 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+    const handleAppleSignIn = async () => {
+        setLoading(true);
+        try {
+            // Generate a cryptographic nonce; pass the SHA256 hash to Apple,
+            // and the raw value to Firebase so it can verify the token.
+            const rawNonce = Crypto.randomUUID();
+            const hashedNonce = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA256,
+                rawNonce
+            );
+
+            const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+                nonce: hashedNonce,
+            });
+
+            if (!credential.identityToken) {
+                throw new Error('No identity token received from Apple');
+            }
+
+            await signInWithApple(
+                credential.identityToken,
+                rawNonce,
+                credential.fullName
+            );
+            onLoginSuccess();
+        } catch (error: any) {
+            if (error.code === 'ERR_REQUEST_CANCELED') {
+                // User cancelled — do nothing
+            } else {
+                Alert.alert('Apple Sign-In Failed', 'Could not sign in with Apple. Please try again.');
+                console.error('Apple Sign-In error:', error);
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleGoogleSignIn = async () => {
         setLoading(true);
@@ -366,6 +409,11 @@ const styles = StyleSheet.create({
         paddingBottom: 48,
         paddingTop: 32,
         alignItems: 'center',
+    },
+    appleButton: {
+        width: '100%',
+        height: TouchTarget.minSize,
+        marginBottom: Spacing.md,
     },
     googleButton: {
         flexDirection: 'row',

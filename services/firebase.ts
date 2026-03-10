@@ -12,6 +12,7 @@ import {
     getReactNativePersistence,
     GoogleAuthProvider,
     initializeAuth,
+    OAuthProvider,
     onAuthStateChanged,
     signInAnonymously,
     signInWithCredential,
@@ -92,6 +93,39 @@ export function getDb() {
 export function getAuthInstance() {
   if (!auth) initFirebase();
   return auth;
+}
+
+// ─── Auth — Apple Sign-In ────────────────────────────────────
+
+export async function signInWithApple(
+    identityToken: string,
+    nonce: string,
+    fullName?: { givenName?: string | null; familyName?: string | null } | null
+): Promise<User> {
+    const authInstance = getAuthInstance();
+    const provider = new OAuthProvider('apple.com');
+    const credential = provider.credential({ idToken: identityToken, rawNonce: nonce });
+    const result = await signInWithCredential(authInstance, credential);
+    const user = result.user;
+
+    // Apple only provides the name on the very first sign-in.
+    // Store whatever we received; fall back to "User" on subsequent logins.
+    const displayName =
+        fullName?.givenName
+            ? `${fullName.givenName}${fullName.familyName ? ' ' + fullName.familyName : ''}`
+            : user.displayName || 'User';
+
+    if (!user.displayName && displayName !== 'User') {
+        await updateProfile(user, { displayName });
+    }
+
+    await saveUser(user.uid, displayName);
+    await AsyncStorage.setItem('@medimind_userId', user.uid);
+    await AsyncStorage.setItem('@medimind_userName', displayName);
+    await AsyncStorage.setItem('@medimind_userPhoto', user.photoURL || '');
+    await AsyncStorage.setItem('@medimind_userEmail', user.email || '');
+
+    return user;
 }
 
 // ─── Auth — Google Sign-In ───────────────────────────────────
