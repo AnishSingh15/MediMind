@@ -128,7 +128,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                         <MaterialCommunityIcons name="pill" size={56} color={Colors.primary} />
                     </View>
                     <Text style={styles.appName}>MediMind</Text>
-                    <Text style={styles.tagline}>Your personal medicine{'\'\''\n\'''}reminder assistant</Text>
+                    <Text style={styles.tagline}>Your personal medicine{'\n'}reminder assistant</Text>
                 </View>
 
                 {!showEmailForm ? (
