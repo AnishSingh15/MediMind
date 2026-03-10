@@ -15,6 +15,7 @@
     "ios": {
       "bundleIdentifier": "com.ani.medimind",
       "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSCameraUsageDescription": "Used for profile photos",
         "NSPhotoLibraryUsageDescription": "Used for profile photos"

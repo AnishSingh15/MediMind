@@ -2,7 +2,10 @@
  * Firebase v10 modular SDK setup
  * Firestore CRUD + Google Sign-In + Offline persistence
  */
-import { default as AsyncStorage, default as ReactNativeAsyncStorage } from "@react-native-async-storage/async-storage";
+import {
+    default as AsyncStorage,
+    default as ReactNativeAsyncStorage,
+} from "@react-native-async-storage/async-storage";
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import {
     Auth,
@@ -98,34 +101,36 @@ export function getAuthInstance() {
 // ─── Auth — Apple Sign-In ────────────────────────────────────
 
 export async function signInWithApple(
-    identityToken: string,
-    nonce: string,
-    fullName?: { givenName?: string | null; familyName?: string | null } | null
+  identityToken: string,
+  nonce: string,
+  fullName?: { givenName?: string | null; familyName?: string | null } | null,
 ): Promise<User> {
-    const authInstance = getAuthInstance();
-    const provider = new OAuthProvider('apple.com');
-    const credential = provider.credential({ idToken: identityToken, rawNonce: nonce });
-    const result = await signInWithCredential(authInstance, credential);
-    const user = result.user;
+  const authInstance = getAuthInstance();
+  const provider = new OAuthProvider("apple.com");
+  const credential = provider.credential({
+    idToken: identityToken,
+    rawNonce: nonce,
+  });
+  const result = await signInWithCredential(authInstance, credential);
+  const user = result.user;
 
-    // Apple only provides the name on the very first sign-in.
-    // Store whatever we received; fall back to "User" on subsequent logins.
-    const displayName =
-        fullName?.givenName
-            ? `${fullName.givenName}${fullName.familyName ? ' ' + fullName.familyName : ''}`
-            : user.displayName || 'User';
+  // Apple only provides the name on the very first sign-in.
+  // Store whatever we received; fall back to "User" on subsequent logins.
+  const displayName = fullName?.givenName
+    ? `${fullName.givenName}${fullName.familyName ? " " + fullName.familyName : ""}`
+    : user.displayName || "User";
 
-    if (!user.displayName && displayName !== 'User') {
-        await updateProfile(user, { displayName });
-    }
+  if (!user.displayName && displayName !== "User") {
+    await updateProfile(user, { displayName });
+  }
 
-    await saveUser(user.uid, displayName);
-    await AsyncStorage.setItem('@medimind_userId', user.uid);
-    await AsyncStorage.setItem('@medimind_userName', displayName);
-    await AsyncStorage.setItem('@medimind_userPhoto', user.photoURL || '');
-    await AsyncStorage.setItem('@medimind_userEmail', user.email || '');
+  await saveUser(user.uid, displayName);
+  await AsyncStorage.setItem("@medimind_userId", user.uid);
+  await AsyncStorage.setItem("@medimind_userName", displayName);
+  await AsyncStorage.setItem("@medimind_userPhoto", user.photoURL || "");
+  await AsyncStorage.setItem("@medimind_userEmail", user.email || "");
 
-    return user;
+  return user;
 }
 
 // ─── Auth — Google Sign-In ───────────────────────────────────

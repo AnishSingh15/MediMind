@@ -20,15 +20,15 @@ _Never miss a dose again — works offline, syncs everywhere_
 
 ## ✨ Features
 
-| Feature | Description |
-|---|---|
-| 🔔 **Smart Reminders** | Reliable daily, weekly, weekday or custom-day notifications |
-| 📅 **Weekly Scheduling** | Set medicines like Vitamin D3 every Monday |
-| 📶 **Offline-First** | Full functionality without internet via Zustand + AsyncStorage |
-| ☁️ **Cloud Sync** | Auto-syncs to Firestore when connected |
-| 📊 **History View** | Monthly calendar showing perfect / partial / missed days |
-| 🎨 **Clean Design** | Black, white & purple UI — high contrast & accessible |
-| 🔐 **Secure Auth** | Google Sign-In or Email/Password with persisted session |
+| Feature                  | Description                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| 🔔 **Smart Reminders**   | Reliable daily, weekly, weekday or custom-day notifications    |
+| 📅 **Weekly Scheduling** | Set medicines like Vitamin D3 every Monday                     |
+| 📶 **Offline-First**     | Full functionality without internet via Zustand + AsyncStorage |
+| ☁️ **Cloud Sync**        | Auto-syncs to Firestore when connected                         |
+| 📊 **History View**      | Monthly calendar showing perfect / partial / missed days       |
+| 🎨 **Clean Design**      | Black, white & purple UI — high contrast & accessible          |
+| 🔐 **Secure Auth**       | Google Sign-In or Email/Password with persisted session        |
 
 ---
 
@@ -36,8 +36,8 @@ _Never miss a dose again — works offline, syncs everywhere_
 
 > _Add screenshots here after running the app_
 
-| Home | Add Medicine | History |
-|------|-------------|---------|
+| Home                           | Add Medicine                     | History                    |
+| ------------------------------ | -------------------------------- | -------------------------- |
 | Today's schedule with progress | Frequency: Daily, Weekly, Custom | Monthly adherence calendar |
 
 ---
@@ -128,12 +128,12 @@ medimind/
 
 ## 🔔 Notification Scheduling
 
-| Frequency | How it works |
-|-----------|-------------|
-| `daily` | `DAILY` trigger — fires every day at set time |
-| `weekly` | `WEEKLY` trigger — fires once a week on the chosen day |
-| `weekdays` | 5 × `WEEKLY` triggers (Mon–Fri) per reminder time |
-| `custom` | One `WEEKLY` trigger per selected day per reminder time |
+| Frequency  | How it works                                            |
+| ---------- | ------------------------------------------------------- |
+| `daily`    | `DAILY` trigger — fires every day at set time           |
+| `weekly`   | `WEEKLY` trigger — fires once a week on the chosen day  |
+| `weekdays` | 5 × `WEEKLY` triggers (Mon–Fri) per reminder time       |
+| `custom`   | One `WEEKLY` trigger per selected day per reminder time |
 
 > Notifications are rescheduled automatically on app boot if any are missing.
 
@@ -164,14 +164,14 @@ service cloud.firestore {
 
 The app uses a **black · white · purple** palette:
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `primary` | `#7C3AED` | Buttons, active states, accents |
-| `primaryLight` | `#A78BFA` | Icons, pill left-cap, highlights |
-| `primaryContainer` | `#EDE9FE` | Button backgrounds, feature icons |
-| `secondary` (black) | `#000000` | Email button, text, borders |
-| `background` | `#FFFFFF` | Screen backgrounds |
-| `surface` | `#F8F8F8` | Cards & input fields |
+| Token               | Value     | Usage                             |
+| ------------------- | --------- | --------------------------------- |
+| `primary`           | `#7C3AED` | Buttons, active states, accents   |
+| `primaryLight`      | `#A78BFA` | Icons, pill left-cap, highlights  |
+| `primaryContainer`  | `#EDE9FE` | Button backgrounds, feature icons |
+| `secondary` (black) | `#000000` | Email button, text, borders       |
+| `background`        | `#FFFFFF` | Screen backgrounds                |
+| `surface`           | `#F8F8F8` | Cards & input fields              |
 
 ---
 
