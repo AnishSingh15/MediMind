@@ -14,8 +14,7 @@ import {
 } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import ColorPicker from '../../components/ColorPicker';
-import TimeChip from '../../components/TimeChip';
-import { commonMedicines, dayLabels, dayValues, frequencyOptions, medicineUnits } from '../../constants/medicines';
+import { commonMedicines, dayLabels, dayValues, frequencyOptions } from '../../constants/medicines';
 import { BorderRadius, Colors, Elevation, Spacing, TouchTarget } from '../../constants/theme';
 import {
     deleteMedicine as firebaseDeleteMedicine,
@@ -38,8 +37,6 @@ export default function EditMedicineScreen() {
 
     // Form state — pre-filled from existing medicine
     const [name, setName] = useState(medicine?.name || '');
-    const [dosage, setDosage] = useState(medicine?.dosage?.toString() || '');
-    const [unit, setUnit] = useState<string>(medicine?.unit || 'mg');
     const [times, setTimes] = useState<string[]>(medicine?.times || []);
     const [frequency, setFrequency] = useState<string>(medicine?.frequency || 'daily');
     const [customDays, setCustomDays] = useState<number[]>(medicine?.customDays || []);
@@ -95,11 +92,7 @@ export default function EditMedicineScreen() {
 
     const validate = (): boolean => {
         if (!name.trim()) {
-            Alert.alert('Missing Information', 'Please enter the medicine name.');
-            return false;
-        }
-        if (!dosage || isNaN(Number(dosage)) || Number(dosage) <= 0) {
-            Alert.alert('Missing Information', 'Please enter a valid dosage amount.');
+            Alert.alert('Missing Information', 'Please enter the medicine name and dosage.');
             return false;
         }
         if (times.length === 0) {
@@ -120,8 +113,6 @@ export default function EditMedicineScreen() {
         try {
             const updates = {
                 name: name.trim(),
-                dosage: Number(dosage),
-                unit,
                 times,
                 frequency,
                 customDays: frequency === 'custom' ? customDays : [],
@@ -141,8 +132,6 @@ export default function EditMedicineScreen() {
                 const notifIds = await scheduleMedicineNotifications({
                     id,
                     name: updates.name,
-                    dosage: updates.dosage,
-                    unit: updates.unit,
                     times: updates.times,
                     frequency: updates.frequency,
                     customDays: updates.customDays,
@@ -225,7 +214,7 @@ export default function EditMedicineScreen() {
                     <Text style={styles.sectionLabel}>Medicine Name</Text>
                     <TextInput
                         mode="outlined"
-                        placeholder="e.g. Metformin"
+                        placeholder="e.g. Vitamin D 60000 IU"
                         value={name}
                         onChangeText={(text) => {
                             setName(text);
@@ -256,50 +245,29 @@ export default function EditMedicineScreen() {
                     )}
                 </View>
 
-                {/* Dosage & Unit */}
-                <View style={styles.section}>
-                    <Text style={styles.sectionLabel}>Dosage</Text>
-                    <View style={styles.dosageRow}>
-                        <TextInput
-                            mode="outlined"
-                            placeholder="500"
-                            value={dosage}
-                            onChangeText={setDosage}
-                            keyboardType="numeric"
-                            style={[styles.textInput, styles.dosageInput]}
-                            contentStyle={styles.textInputContent}
-                            outlineColor={Colors.border}
-                            activeOutlineColor={Colors.primary}
-                            outlineStyle={{ borderRadius: BorderRadius.md }}
-                        />
-                        <View style={styles.unitSelector}>
-                            {medicineUnits.map((u) => (
-                                <TouchableOpacity
-                                    key={u}
-                                    style={[styles.unitButton, unit === u && styles.unitButtonActive]}
-                                    onPress={() => setUnit(u)}
-                                    hitSlop={TouchTarget.minHitSlop}
-                                >
-                                    <Text style={[styles.unitButtonText, unit === u && styles.unitButtonTextActive]}>
-                                        {u}
-                                    </Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    </View>
-                </View>
+
 
                 {/* Reminder Times */}
                 <View style={styles.section}>
                     <Text style={styles.sectionLabel}>Reminder Times</Text>
                     <View style={styles.timesContainer}>
                         {times.map((t) => (
-                            <TimeChip key={t} time={t} onRemove={() => handleRemoveTime(t)} />
+                            <View key={t} style={styles.timeCard}>
+                                <View style={styles.timeCardHandle} />
+                                <Text style={styles.timeCardText}>{formatTime12(t)}</Text>
+                                <TouchableOpacity
+                                    style={styles.timeCardRemove}
+                                    onPress={() => handleRemoveTime(t)}
+                                    hitSlop={TouchTarget.minHitSlop}
+                                >
+                                    <MaterialCommunityIcons name="delete-outline" size={22} color={Colors.danger} />
+                                </TouchableOpacity>
+                            </View>
                         ))}
                     </View>
-                    <TouchableOpacity style={styles.addTimeButton} onPress={handleAddTime} hitSlop={TouchTarget.minHitSlop}>
-                        <MaterialCommunityIcons name="plus-circle-outline" size={24} color={Colors.primary} />
-                        <Text style={styles.addTimeText}>Add Time</Text>
+                    <TouchableOpacity style={styles.addTimeButton} onPress={handleAddTime} activeOpacity={0.7}>
+                        <MaterialCommunityIcons name="clock-plus-outline" size={24} color={Colors.primary} />
+                        <Text style={styles.addTimeText}>Select a Time</Text>
                     </TouchableOpacity>
                     {showTimePicker && (
                         <DateTimePicker
@@ -375,6 +343,13 @@ export default function EditMedicineScreen() {
     );
 }
 
+function formatTime12(time: string): string {
+    const [h, m] = time.split(':').map(Number);
+    const amPm = h >= 12 ? 'PM' : 'AM';
+    const hour12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+    return `${hour12}:${m.toString().padStart(2, '0')} ${amPm}`;
+}
+
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: Colors.background },
     scrollView: { flex: 1 },
@@ -389,23 +364,22 @@ const styles = StyleSheet.create({
     },
     suggestionItem: { padding: Spacing.md, borderBottomWidth: 1, borderBottomColor: Colors.divider },
     suggestionText: { fontSize: 18, color: Colors.textPrimary },
-    dosageRow: { flexDirection: 'column', gap: Spacing.md },
-    dosageInput: { flex: 1 },
-    unitSelector: { flexDirection: 'row', gap: Spacing.sm },
-    unitButton: {
-        flex: 1, paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg,
-        borderRadius: BorderRadius.md, borderWidth: 2, borderColor: Colors.border,
-        alignItems: 'center', minHeight: 48, justifyContent: 'center',
+    timesContainer: { flexDirection: 'column', gap: Spacing.sm, marginBottom: Spacing.md },
+    timeCard: {
+        flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surface,
+        borderRadius: BorderRadius.lg, padding: Spacing.md, borderWidth: 1,
+        borderColor: Colors.border, ...Elevation.none,
     },
-    unitButtonActive: { borderColor: Colors.primary, backgroundColor: Colors.primaryContainer },
-    unitButtonText: { fontSize: 16, fontWeight: '600', color: Colors.textSecondary },
-    unitButtonTextActive: { color: Colors.primary },
-    timesContainer: { flexDirection: 'row', flexWrap: 'wrap', marginBottom: Spacing.sm },
+    timeCardHandle: { width: 4, height: 24, backgroundColor: Colors.primary, borderRadius: 2, marginRight: Spacing.md },
+    timeCardText: { flex: 1, fontSize: 20, fontWeight: '700', color: Colors.textPrimary },
+    timeCardRemove: { padding: Spacing.xs, backgroundColor: Colors.dangerLight, borderRadius: BorderRadius.md },
     addTimeButton: {
-        flexDirection: 'row', alignItems: 'center', gap: Spacing.sm,
-        paddingVertical: Spacing.md, minHeight: TouchTarget.minSize,
+        flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+        backgroundColor: Colors.primaryContainer, borderWidth: 2, borderColor: Colors.primary,
+        borderRadius: BorderRadius.lg, borderStyle: 'dashed', paddingVertical: Spacing.lg,
+        gap: Spacing.sm, minHeight: 64,
     },
-    addTimeText: { fontSize: 18, fontWeight: '600', color: Colors.primary },
+    addTimeText: { fontSize: 18, fontWeight: '700', color: Colors.primaryDark },
     frequencyRow: { flexDirection: 'row', gap: Spacing.sm },
     frequencyButton: {
         flex: 1, paddingVertical: Spacing.md, paddingHorizontal: Spacing.sm,

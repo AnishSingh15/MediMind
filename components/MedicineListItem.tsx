@@ -8,8 +8,6 @@ import TimeChip from './TimeChip';
 interface MedicineListItemProps {
     id: string;
     name: string;
-    dosage: number;
-    unit: string;
     times: string[];
     color: string;
     active: boolean;
@@ -20,8 +18,6 @@ interface MedicineListItemProps {
 export default function MedicineListItem({
     id,
     name,
-    dosage,
-    unit,
     times,
     color,
     active,
@@ -39,9 +35,6 @@ export default function MedicineListItem({
                 <View style={styles.infoSection}>
                     <Text style={[styles.medicineName, !active && styles.textInactive]}>
                         {name}
-                    </Text>
-                    <Text style={[styles.dosageText, !active && styles.textInactive]}>
-                        {dosage} {unit}
                     </Text>
                     <View style={styles.timesRow}>
                         {times.map((t) => (
@@ -99,12 +92,7 @@ const styles = StyleSheet.create({
         color: Colors.textPrimary,
         marginBottom: 2,
     },
-    dosageText: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: Colors.textSecondary,
-        marginBottom: Spacing.sm,
-    },
+
     textInactive: {
         color: Colors.textTertiary,
     },

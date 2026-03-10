@@ -43,8 +43,6 @@ export default function MedicinesScreen() {
             const notifIds = await scheduleMedicineNotifications({
                 id: med.id,
                 name: med.name,
-                dosage: med.dosage,
-                unit: med.unit,
                 times: med.times,
                 frequency: med.frequency,
                 customDays: med.customDays,
@@ -147,8 +145,6 @@ export default function MedicinesScreen() {
                         key={med.id}
                         id={med.id}
                         name={med.name}
-                        dosage={med.dosage}
-                        unit={med.unit}
                         times={med.times}
                         color={med.color}
                         active={med.active}
@@ -173,6 +169,7 @@ export default function MedicinesScreen() {
         </SafeAreaView>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {

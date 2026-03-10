@@ -23,12 +23,9 @@ export default function LogDoseScreen() {
         medicineId: string;
         medicineName: string;
         scheduledTime: string;
-        dosage: string;
-        unit: string;
     }>();
 
     const logDoseToStore = useLogStore((s) => s.logDose);
-    const [actualDosage, setActualDosage] = useState(params.dosage || '');
     const [note, setNote] = useState('');
     const [saving, setSaving] = useState(false);
 
@@ -54,7 +51,6 @@ export default function LogDoseScreen() {
                 scheduledDate: today,
                 takenAt: action === 'taken' ? new Date() : null,
                 skipped: action === 'skip',
-                actualDosage: Number(actualDosage) || Number(params.dosage) || 0,
                 note: note.trim(),
             };
 
@@ -106,24 +102,7 @@ export default function LogDoseScreen() {
                     Scheduled for {formatTime(params.scheduledTime || '')}
                 </Text>
 
-                {/* Dosage Input */}
-                <View style={styles.fieldSection}>
-                    <Text style={styles.fieldLabel}>Dosage</Text>
-                    <View style={styles.dosageRow}>
-                        <TextInput
-                            mode="outlined"
-                            value={actualDosage}
-                            onChangeText={setActualDosage}
-                            keyboardType="numeric"
-                            style={styles.dosageInput}
-                            contentStyle={styles.dosageInputContent}
-                            outlineColor={Colors.border}
-                            activeOutlineColor={Colors.primary}
-                            outlineStyle={{ borderRadius: BorderRadius.md }}
-                        />
-                        <Text style={styles.unitText}>{params.unit}</Text>
-                    </View>
-                </View>
+
 
                 {/* Note Input */}
                 <View style={styles.fieldSection}>
@@ -209,24 +188,7 @@ const styles = StyleSheet.create({
         color: Colors.textPrimary,
         marginBottom: Spacing.sm,
     },
-    dosageRow: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: Spacing.md,
-    },
-    dosageInput: {
-        flex: 1,
-        backgroundColor: Colors.surface,
-        fontSize: 20,
-    },
-    dosageInputContent: {
-        fontSize: 20,
-    },
-    unitText: {
-        fontSize: 20,
-        fontWeight: '600',
-        color: Colors.textSecondary,
-    },
+
     noteInput: {
         backgroundColor: Colors.surface,
         fontSize: 18,

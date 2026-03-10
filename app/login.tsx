@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import React, { useState } from 'react';
 import {
@@ -125,10 +125,10 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                 {/* Logo & Branding */}
                 <View style={styles.brandSection}>
                     <View style={styles.logoContainer}>
-                        <MaterialCommunityIcons name="pill" size={64} color={Colors.primary} />
+                        <MaterialCommunityIcons name="pill" size={56} color={Colors.primary} />
                     </View>
                     <Text style={styles.appName}>MediMind</Text>
-                    <Text style={styles.tagline}>Your personal medicine{'\n'}reminder assistant 💊</Text>
+                    <Text style={styles.tagline}>Your personal medicine{'\'\''\n\'''}reminder assistant</Text>
                 </View>
 
                 {!showEmailForm ? (
@@ -146,13 +146,13 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                                 style={[styles.googleButton, loading && styles.buttonDisabled]}
                                 onPress={handleGoogleSignIn}
                                 disabled={loading}
-                                activeOpacity={0.7}
+                                activeOpacity={0.85}
                             >
                                 <View style={styles.googleIconWrapper}>
-                                    <MaterialCommunityIcons name="google" size={24} color="#fff" />
+                                    <AntDesign name="google" size={20} color="#EA4335" />
                                 </View>
                                 <Text style={styles.googleButtonText}>
-                                    {loading ? 'Signing in...' : 'Continue with Google'}
+                                    {loading ? 'Signing in…' : 'Continue with Google'}
                                 </Text>
                             </TouchableOpacity>
 
@@ -161,7 +161,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                                 onPress={() => setShowEmailForm(true)}
                                 activeOpacity={0.7}
                             >
-                                <MaterialCommunityIcons name="email-outline" size={22} color={Colors.primary} />
+                                <MaterialCommunityIcons name="email-outline" size={22} color="#FFFFFF" />
                                 <Text style={styles.emailButtonText}>Continue with Email</Text>
                             </TouchableOpacity>
 
@@ -300,14 +300,14 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 100,
         backgroundColor: Colors.primaryContainer,
-        opacity: 0.5,
+        opacity: 0.6,
     },
     circle2: {
         width: 120,
         height: 120,
         borderRadius: 60,
-        backgroundColor: Colors.secondaryContainer,
-        opacity: 0.4,
+        backgroundColor: '#000000',
+        opacity: 0.05,
         position: 'absolute',
         top: 100,
         left: -40,
@@ -317,9 +317,9 @@ const styles = StyleSheet.create({
         marginTop: 100,
     },
     logoContainer: {
-        width: 110,
-        height: 110,
-        borderRadius: 55,
+        width: 100,
+        height: 100,
+        borderRadius: 50,
         backgroundColor: Colors.primaryContainer,
         justifyContent: 'center',
         alignItems: 'center',
@@ -329,12 +329,12 @@ const styles = StyleSheet.create({
     appName: {
         fontSize: 36,
         fontWeight: '800',
-        color: Colors.primary,
-        letterSpacing: 1,
+        color: '#000000',
+        letterSpacing: 0.5,
         marginBottom: Spacing.sm,
     },
     tagline: {
-        fontSize: 18,
+        fontSize: 17,
         color: Colors.textSecondary,
         textAlign: 'center',
         lineHeight: 26,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     featureText: {
-        fontSize: 18,
+        fontSize: 17,
         color: Colors.textPrimary,
         fontWeight: '500',
     },
@@ -370,38 +370,41 @@ const styles = StyleSheet.create({
     googleButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: Colors.primary,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1.5,
+        borderColor: '#DADCE0',
         borderRadius: BorderRadius.lg,
-        paddingVertical: 16,
+        paddingVertical: 14,
         paddingHorizontal: 24,
         width: '100%',
         justifyContent: 'center',
         gap: Spacing.md,
         minHeight: TouchTarget.minSize,
-        ...Elevation.medium,
+        ...Elevation.low,
     },
     buttonDisabled: {
         opacity: 0.6,
     },
     googleIconWrapper: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        backgroundColor: 'rgba(255,255,255,0.2)',
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
+        borderColor: '#E8EAED',
         justifyContent: 'center',
         alignItems: 'center',
     },
     googleButtonText: {
-        fontSize: 20,
-        fontWeight: '700',
-        color: Colors.textOnPrimary,
+        fontSize: 17,
+        fontWeight: '600',
+        color: '#3C4043',
     },
     emailButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 2,
-        borderColor: Colors.primary,
+        backgroundColor: '#000000',
         borderRadius: BorderRadius.lg,
         paddingVertical: 14,
         paddingHorizontal: 24,
@@ -409,14 +412,15 @@ const styles = StyleSheet.create({
         gap: Spacing.sm,
         marginTop: Spacing.md,
         minHeight: TouchTarget.minSize,
+        ...Elevation.medium,
     },
     emailButtonText: {
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: '600',
-        color: Colors.primary,
+        color: '#FFFFFF',
     },
     disclaimer: {
-        fontSize: 14,
+        fontSize: 13,
         color: Colors.textTertiary,
         textAlign: 'center',
         marginTop: Spacing.lg,
@@ -435,11 +439,11 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: Colors.surface,
-        fontSize: 18,
+        fontSize: 17,
         marginBottom: Spacing.md,
     },
     inputContent: {
-        fontSize: 18,
+        fontSize: 17,
     },
     submitButton: {
         alignItems: 'center',
@@ -452,7 +456,7 @@ const styles = StyleSheet.create({
         ...Elevation.medium,
     },
     submitButtonText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '700',
         color: Colors.textOnPrimary,
     },
@@ -461,7 +465,7 @@ const styles = StyleSheet.create({
         marginTop: Spacing.xl,
     },
     switchAuthText: {
-        fontSize: 16,
+        fontSize: 15,
         color: Colors.textSecondary,
     },
     switchAuthLink: {
@@ -476,7 +480,7 @@ const styles = StyleSheet.create({
         gap: Spacing.sm,
     },
     backButtonText: {
-        fontSize: 16,
+        fontSize: 15,
         color: Colors.textSecondary,
     },
 });

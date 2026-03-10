@@ -36,3 +36,5 @@ yarn-error.*
 
 # EAS
 .easignore
+generate_icons.py
+build.log

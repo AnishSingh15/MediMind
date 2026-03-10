@@ -6,8 +6,6 @@ import { BorderRadius, Colors, Elevation, Spacing, TouchTarget } from '../consta
 
 interface MedicineCardProps {
     name: string;
-    dosage: number;
-    unit: string;
     time: string;
     color: string;
     isTaken: boolean;
@@ -17,8 +15,6 @@ interface MedicineCardProps {
 
 export default function MedicineCard({
     name,
-    dosage,
-    unit,
     time,
     color,
     isTaken,
@@ -33,15 +29,12 @@ export default function MedicineCard({
     };
 
     return (
-        <View style={[styles.card, { borderLeftColor: color }, ...Object.values(Elevation.low)]}>
+        <View style={[styles.card, { borderLeftColor: color }, Elevation.low]}>
             <View style={styles.cardContent}>
                 <View style={styles.leftSection}>
                     <View style={[styles.colorDot, { backgroundColor: color }]} />
                     <View style={styles.infoSection}>
                         <Text style={styles.medicineName}>{name}</Text>
-                        <Text style={styles.dosageText}>
-                            {dosage} {unit}
-                        </Text>
                         <View style={styles.timeRow}>
                             <MaterialCommunityIcons name="clock-outline" size={18} color={Colors.textTertiary} />
                             <Text style={styles.timeText}>{formatTime(time)}</Text>
@@ -114,12 +107,7 @@ const styles = StyleSheet.create({
         color: Colors.textPrimary,
         marginBottom: 2,
     },
-    dosageText: {
-        fontSize: 16,
-        fontWeight: '500',
-        color: Colors.textSecondary,
-        marginBottom: 4,
-    },
+
     timeRow: {
         flexDirection: 'row',
         alignItems: 'center',

@@ -4,56 +4,56 @@
  */
 
 export const Colors = {
-  // Primary palette — calming blue/teal
-  primary: '#1B6B93',
-  primaryLight: '#4A9CC7',
-  primaryDark: '#0E4D6B',
-  primaryContainer: '#D6EFF8',
+  // Primary palette — purple accent
+  primary: "#7C3AED",
+  primaryLight: "#A78BFA",
+  primaryDark: "#5B21B6",
+  primaryContainer: "#EDE9FE",
 
-  // Secondary — warm teal
-  secondary: '#2E8B7A',
-  secondaryLight: '#5CBFAC',
-  secondaryContainer: '#D4F0EB',
+  // Secondary — pure black
+  secondary: "#000000",
+  secondaryLight: "#1A1A1A",
+  secondaryContainer: "#F0F0F0",
 
-  // Surface & Background
-  background: '#FAFCFF',
-  surface: '#FFFFFF',
-  surfaceVariant: '#F0F5FA',
-  cardBackground: '#FFFFFF',
+  // Surface & Background — white
+  background: "#FFFFFF",
+  surface: "#F8F8F8",
+  surfaceVariant: "#F0F0F0",
+  cardBackground: "#FFFFFF",
 
   // Status colors
-  success: '#2E7D32',
-  successLight: '#E8F5E9',
-  successContainer: '#C8E6C9',
+  success: "#16A34A",
+  successLight: "#DCFCE7",
+  successContainer: "#BBF7D0",
 
-  danger: '#C62828',
-  dangerLight: '#FFEBEE',
-  dangerContainer: '#FFCDD2',
+  danger: "#DC2626",
+  dangerLight: "#FEE2E2",
+  dangerContainer: "#FECACA",
 
-  warning: '#F57F17',
-  warningLight: '#FFF9C4',
-  warningContainer: '#FFF176',
+  warning: "#D97706",
+  warningLight: "#FEF3C7",
+  warningContainer: "#FDE68A",
 
   // Text
-  textPrimary: '#1A1C1E',
-  textSecondary: '#44474E',
-  textTertiary: '#74777F',
-  textOnPrimary: '#FFFFFF',
-  textOnSuccess: '#FFFFFF',
-  textOnDanger: '#FFFFFF',
+  textPrimary: "#000000",
+  textSecondary: "#3F3F3F",
+  textTertiary: "#737373",
+  textOnPrimary: "#FFFFFF",
+  textOnSuccess: "#FFFFFF",
+  textOnDanger: "#FFFFFF",
 
   // Borders & Dividers
-  border: '#E0E3E8',
-  divider: '#E8EAED',
+  border: "#E5E5E5",
+  divider: "#EBEBEB",
 
-  // Medicine card colors (6 soft options)
+  // Medicine card colors — black/white/purple palette
   medicineColors: [
-    '#4A9CC7', // Soft blue
-    '#5CBFAC', // Teal
-    '#F06292', // Soft pink
-    '#FFB74D', // Warm orange
-    '#9575CD', // Soft purple
-    '#81C784', // Soft green
+    "#7C3AED", // Purple
+    "#000000", // Black
+    "#A78BFA", // Light Purple
+    "#4B5563", // Dark Grey
+    "#5B21B6", // Deep Purple
+    "#374151", // Charcoal
   ],
 } as const;
 
@@ -61,49 +61,49 @@ export const Typography = {
   // Elderly-friendly sizes — minimum 18sp body
   heading1: {
     fontSize: 28,
-    fontWeight: '700' as const,
+    fontWeight: "700" as const,
     lineHeight: 36,
     color: Colors.textPrimary,
   },
   heading2: {
     fontSize: 24,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
     lineHeight: 32,
     color: Colors.textPrimary,
   },
   heading3: {
     fontSize: 20,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
     lineHeight: 28,
     color: Colors.textPrimary,
   },
   body: {
     fontSize: 18,
-    fontWeight: '400' as const,
+    fontWeight: "400" as const,
     lineHeight: 26,
     color: Colors.textPrimary,
   },
   bodyBold: {
     fontSize: 18,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
     lineHeight: 26,
     color: Colors.textPrimary,
   },
   button: {
     fontSize: 20,
-    fontWeight: '600' as const,
+    fontWeight: "600" as const,
     lineHeight: 28,
     color: Colors.textOnPrimary,
   },
   caption: {
     fontSize: 16,
-    fontWeight: '400' as const,
+    fontWeight: "400" as const,
     lineHeight: 22,
     color: Colors.textSecondary,
   },
   label: {
     fontSize: 16,
-    fontWeight: '500' as const,
+    fontWeight: "500" as const,
     lineHeight: 22,
     color: Colors.textSecondary,
   },
@@ -131,28 +131,28 @@ export const BorderRadius = {
 export const Elevation = {
   none: {
     elevation: 0,
-    shadowColor: 'transparent',
+    shadowColor: "transparent",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,
     shadowRadius: 0,
   },
   low: {
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
   },
   medium: {
     elevation: 4,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 6,
   },
   high: {
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 12,

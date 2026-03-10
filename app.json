@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#FAFCFF"
+      "backgroundColor": "#7C3AED"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "package": "com.ani.medimind",
       "adaptiveIcon": {
-        "backgroundColor": "#D6EFF8",
+        "backgroundColor": "#7C3AED",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -41,7 +41,7 @@
       [
         "expo-notifications",
         {
-          "color": "#1B6B93",
+          "color": "#7C3AED",
           "defaultChannel": "medicine-reminders"
         }
       ],
