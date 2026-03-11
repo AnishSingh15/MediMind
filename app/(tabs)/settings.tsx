@@ -7,7 +7,6 @@ import { Text } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BorderRadius, Colors, Elevation, Spacing } from '../../constants/theme';
 import { signOut } from '../../services/firebase';
-import { showBatteryOptimizationGuide } from '../../services/notifications';
 
 export default function SettingsScreen() {
     const [userName, setUserName] = useState('');
@@ -29,9 +28,12 @@ export default function SettingsScreen() {
                     style: 'destructive',
                     onPress: async () => {
                         try {
-                            await GoogleSignin.signOut();
+                            const currentGoogleUser = GoogleSignin.getCurrentUser();
+                            if (currentGoogleUser) {
+                                await GoogleSignin.signOut();
+                            }
                         } catch (e) {
-                            // May fail if not signed in with Google
+                            // Ignore — may not have used Google sign-in
                         }
                         await signOut();
                         // The auth state listener in _layout.tsx will handle navigation
@@ -62,20 +64,6 @@ export default function SettingsScreen() {
                         </View>
                     </View>
                 ) : null}
-
-                {/* Battery Optimization */}
-                <TouchableOpacity
-                    style={styles.settingItem}
-                    onPress={showBatteryOptimizationGuide}
-                    activeOpacity={0.7}
-                >
-                    <MaterialCommunityIcons name="battery-heart" size={28} color={Colors.primary} />
-                    <View style={styles.settingInfo}>
-                        <Text style={styles.settingTitle}>Battery Optimization</Text>
-                        <Text style={styles.settingDesc}>Keep reminders reliable</Text>
-                    </View>
-                    <MaterialCommunityIcons name="chevron-right" size={24} color={Colors.textTertiary} />
-                </TouchableOpacity>
 
                 {/* Sign Out */}
                 <TouchableOpacity

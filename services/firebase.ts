@@ -7,6 +7,7 @@ import {
     default as ReactNativeAsyncStorage,
 } from "@react-native-async-storage/async-storage";
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+// @ts-ignore getReactNativePersistence exists at runtime but missing from Firebase TS types
 import {
     Auth,
     createUserWithEmailAndPassword,

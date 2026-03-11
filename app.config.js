@@ -12,12 +12,12 @@ if (process.env.GOOGLE_SERVICES_IOS_BASE64) {
 
 module.exports = {
   expo: {
-    name: 'MediMind',
+    name: 'DoseTrack',
     slug: 'medimind',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
-    scheme: 'medimind',
+    scheme: 'dosetrack',
     userInterfaceStyle: 'light',
     splash: {
       image: './assets/images/splash-icon.png',
@@ -65,6 +65,7 @@ module.exports = {
         {
           color: '#7C3AED',
           defaultChannel: 'medicine-reminders',
+          sounds: ['./assets/sounds/pill_reminder.wav'],
         },
       ],
       '@react-native-community/datetimepicker',

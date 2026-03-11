@@ -48,7 +48,7 @@ export async function requestPermissions(): Promise<boolean> {
   if (finalStatus !== "granted") {
     Alert.alert(
       "Notifications Required",
-      "MediMind needs notifications to remind you about your medicines. Please enable them in Settings.",
+      "DoseTrack needs notifications to remind you about your medicines. Please enable them in Settings.",
       [{ text: "OK" }],
     );
     return false;
@@ -62,6 +62,7 @@ export async function requestPermissions(): Promise<boolean> {
       vibrationPattern: [0, 250, 250, 250],
       enableVibrate: true,
       lightColor: "#7C3AED",
+      sound: "pill_reminder.wav",
     });
   }
 
@@ -155,6 +156,7 @@ export async function scheduleMedicineNotifications(
           content: {
             title: "💊 Medicine Reminder",
             body: `Time to take ${medicine.name}`,
+            sound: "pill_reminder.wav",
             data: {
               medicineId: medicine.id,
               medicineName: medicine.name,
@@ -178,6 +180,7 @@ export async function scheduleMedicineNotifications(
         content: {
           title: "💊 Medicine Reminder",
           body: `Time to take ${medicine.name}`,
+          sound: "pill_reminder.wav",
           data: {
             medicineId: medicine.id,
             medicineName: medicine.name,
@@ -210,7 +213,7 @@ export async function testNotification(): Promise<void> {
     content: {
       title: "🔔 Test Reminder",
       body: "Notifications are working perfectly!",
-      sound: true,
+      sound: "pill_reminder.wav",
       priority: Notifications.AndroidNotificationPriority.MAX,
       color: "#7C3AED",
     },
@@ -295,7 +298,7 @@ export async function openBatteryOptimizationSettings(): Promise<void> {
       } catch {
         Alert.alert(
           "Battery Settings",
-          "Please go to Settings → Battery → Battery Optimization → MediMind → Don't Optimize",
+          "Please go to Settings → Battery → Battery Optimization → DoseTrack → Don't Optimize",
           [{ text: "OK" }],
         );
       }
@@ -306,7 +309,7 @@ export async function openBatteryOptimizationSettings(): Promise<void> {
 export function showBatteryOptimizationGuide(): void {
   Alert.alert(
     "🔋 Keep Reminders Working",
-    'To make sure medicine reminders always arrive on time, please disable battery optimization for MediMind.\n\nTap "Open Settings" and find MediMind → select "Don\'t Optimize".',
+    'To make sure medicine reminders always arrive on time, please disable battery optimization for DoseTrack.\n\nTap "Open Settings" and find DoseTrack → select "Don\'t Optimize".',
     [
       { text: "Later", style: "cancel" },
       { text: "Open Settings", onPress: openBatteryOptimizationSettings },

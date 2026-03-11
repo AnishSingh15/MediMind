@@ -62,16 +62,33 @@ export default function AddMedicineScreen() {
   };
 
   const handleTimeChange = (_event: any, selectedDate?: Date) => {
-    setShowTimePicker(Platform.OS === "ios");
-    if (selectedDate) {
-      const hours = selectedDate.getHours().toString().padStart(2, "0");
-      const minutes = selectedDate.getMinutes().toString().padStart(2, "0");
-      const timeStr = `${hours}:${minutes}`;
-
-      if (!times.includes(timeStr)) {
-        setTimes([...times, timeStr].sort());
+    if (Platform.OS === 'android') {
+      // Android: picker closes on select, add time immediately
+      setShowTimePicker(false);
+      if (selectedDate) {
+        const hours = selectedDate.getHours().toString().padStart(2, "0");
+        const minutes = selectedDate.getMinutes().toString().padStart(2, "0");
+        const timeStr = `${hours}:${minutes}`;
+        if (!times.includes(timeStr)) {
+          setTimes([...times, timeStr].sort());
+        }
+      }
+    } else {
+      // iOS: just update the spinner value, don't add yet
+      if (selectedDate) {
+        setPickerDate(selectedDate);
       }
     }
+  };
+
+  const handleConfirmTime = () => {
+    const hours = pickerDate.getHours().toString().padStart(2, "0");
+    const minutes = pickerDate.getMinutes().toString().padStart(2, "0");
+    const timeStr = `${hours}:${minutes}`;
+    if (!times.includes(timeStr)) {
+      setTimes([...times, timeStr].sort());
+    }
+    setShowTimePicker(false);
   };
 
   const handleRemoveTime = (timeToRemove: string) => {
@@ -160,14 +177,16 @@ export default function AddMedicineScreen() {
 
       // 3. Try Firebase sync (non-blocking, may fail offline)
       try {
-        // Using a placeholder userId for now (Anonymous Auth)
         const userId = await AsyncStorage.getItem("@medimind_userId");
         if (userId) {
           const firebaseId = await firebaseAddMedicine(userId, medicineData);
-          // Could update local ID to Firebase ID here in Phase 2
+          console.log("Firebase sync OK, id:", firebaseId);
+        } else {
+          console.warn("Firebase sync skipped: no userId in AsyncStorage");
         }
-      } catch (e) {
-        console.warn("Firebase sync deferred (offline):", e);
+      } catch (e: any) {
+        // Log detailed error for debugging Firestore permission issues
+        console.warn("Firebase sync failed:", e?.code || e?.message || e);
       }
 
       // Navigate back
@@ -263,13 +282,31 @@ export default function AddMedicineScreen() {
           </TouchableOpacity>
 
           {showTimePicker && (
-            <DateTimePicker
-              value={pickerDate}
-              mode="time"
-              is24Hour={false}
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={handleTimeChange}
-            />
+            <View>
+              <DateTimePicker
+                value={pickerDate}
+                mode="time"
+                is24Hour={false}
+                display={Platform.OS === "ios" ? "spinner" : "default"}
+                onChange={handleTimeChange}
+              />
+              {Platform.OS === "ios" && (
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 8 }}>
+                  <TouchableOpacity
+                    onPress={() => setShowTimePicker(false)}
+                    style={{ paddingVertical: 8, paddingHorizontal: 16 }}
+                  >
+                    <Text style={{ color: Colors.textSecondary, fontSize: 16, fontWeight: '600' }}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleConfirmTime}
+                    style={{ paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Colors.primary, borderRadius: BorderRadius.md }}
+                  >
+                    <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}>Add Time</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           )}
         </View>
 

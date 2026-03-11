@@ -98,7 +98,10 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      await GoogleSignin.hasPlayServices();
+      // hasPlayServices() throws on iOS — Play Services is Android-only
+      if (Platform.OS === 'android') {
+        await GoogleSignin.hasPlayServices();
+      }
       const signInResult = await GoogleSignin.signIn();
       const idToken = signInResult?.data?.idToken;
 
@@ -207,7 +210,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
               color={Colors.primary}
             />
           </View>
-          <Text style={styles.appName}>MediMind</Text>
+          <Text style={styles.appName}>DoseTrack</Text>
           <Text style={styles.tagline}>
             Your personal medicine{"\n"}reminder assistant
           </Text>
@@ -237,6 +240,18 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   {loading ? "Signing in…" : "Continue with Google"}
                 </Text>
               </TouchableOpacity>
+
+              {Platform.OS === 'ios' && (
+                <TouchableOpacity
+                  style={[styles.appleButton, loading && styles.buttonDisabled]}
+                  onPress={handleAppleSignIn}
+                  disabled={loading}
+                  activeOpacity={0.85}
+                >
+                  <MaterialCommunityIcons name="apple" size={22} color="#FFFFFF" />
+                  <Text style={styles.appleButtonText}>Continue with Apple</Text>
+                </TouchableOpacity>
+              )}
 
               <TouchableOpacity
                 style={styles.emailButton}
@@ -472,9 +487,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   appleButton: {
-    width: "100%",
-    height: TouchTarget.minSize,
-    marginBottom: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000000',
+    borderRadius: BorderRadius.lg,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    width: '100%',
+    gap: Spacing.sm,
+    marginTop: Spacing.md,
+    minHeight: TouchTarget.minSize,
+    ...Elevation.medium,
+  },
+  appleButtonText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   googleButton: {
     flexDirection: "row",

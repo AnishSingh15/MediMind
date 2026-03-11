@@ -22,7 +22,6 @@ import {
 } from "../../constants/theme";
 import {
     rescheduleAllIfMissing,
-    showBatteryOptimizationGuide,
 } from "../../services/notifications";
 import { useLogStore } from "../../store/useLogStore";
 import { useMedicineStore } from "../../store/useMedicineStore";
@@ -56,18 +55,6 @@ export default function HomeScreen() {
   // Reschedule notifications if needed on mount
   useEffect(() => {
     rescheduleAllIfMissing();
-
-    // Check if battery optimization guide should be shown (first launch)
-    async function checkBatteryGuide() {
-      const shown = await AsyncStorage.getItem("@medimind_battery_guide_shown");
-      if (!shown) {
-        setTimeout(() => {
-          showBatteryOptimizationGuide();
-          AsyncStorage.setItem("@medimind_battery_guide_shown", "true");
-        }, 2000);
-      }
-    }
-    checkBatteryGuide();
   }, []);
 
   // Build today's schedule from medicines
