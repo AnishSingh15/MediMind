@@ -1,10 +1,12 @@
 /**
  * Zustand store for medicines
  * Persisted to AsyncStorage for offline-first access
+ * Syncs from Firestore on login (so reinstalls restore data)
  */
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { MedicineData } from '../services/firebase';
+import { getMedicines, MedicineData } from '../services/firebase';
+import { scheduleMedicineNotifications } from '../services/notifications';
 
 const STORAGE_KEY = '@medimind_medicines';
 
@@ -32,18 +34,63 @@ export const useMedicineStore = create<MedicineStore>((set, get) => ({
     loadMedicines: async () => {
         try {
             set({ loading: true });
+
+            // 1. Load from AsyncStorage first (instant, offline-first)
             const stored = await AsyncStorage.getItem(STORAGE_KEY);
+            let medicines: Medicine[] = [];
             if (stored) {
                 const parsed = JSON.parse(stored);
-                // Restore Date objects
-                const medicines = parsed.map((m: any) => ({
+                medicines = parsed.map((m: any) => ({
                     ...m,
                     startDate: new Date(m.startDate),
                 }));
                 set({ medicines, loading: false });
-            } else {
-                set({ medicines: [], loading: false });
             }
+
+            // 2. Try to sync from Firestore (handles reinstall / new device)
+            try {
+                const userId = await AsyncStorage.getItem('@medimind_userId');
+                if (userId) {
+                    const cloudMeds = await getMedicines(userId);
+                    if (cloudMeds.length > 0) {
+                        // Merge: use cloud data as source of truth,
+                        // but keep local-only medicines (not yet synced)
+                        const cloudIds = new Set(cloudMeds.map(m => m.id));
+                        const localOnly = medicines.filter(m => m.id.startsWith('local_') && !cloudIds.has(m.id));
+                        const merged = [...cloudMeds.map(m => ({ ...m, notifIds: [] as string[] })), ...localOnly];
+                        set({ medicines: merged, loading: false });
+                        await persistMedicines(merged);
+
+                        // Reschedule notifications for all active medicines
+                        // (critical after reinstall — local notifications are wiped)
+                        for (const med of merged) {
+                            if (med.active && med.times?.length > 0) {
+                                try {
+                                    const notifIds = await scheduleMedicineNotifications({
+                                        id: med.id,
+                                        name: med.name,
+                                        times: med.times,
+                                        frequency: med.frequency,
+                                        customDays: med.customDays,
+                                    });
+                                    med.notifIds = notifIds;
+                                } catch (e) {
+                                    console.warn('Failed to reschedule notifications for', med.name, e);
+                                }
+                            }
+                        }
+                        // Persist updated notification IDs
+                        await persistMedicines(merged);
+                    } else if (medicines.length === 0) {
+                        set({ medicines: [], loading: false });
+                    }
+                }
+            } catch (e) {
+                // Firestore unavailable (offline) — local data is fine
+                console.warn('Firestore sync skipped:', e);
+            }
+
+            set({ loading: false });
         } catch (e) {
             console.warn('Failed to load medicines:', e);
             set({ medicines: [], loading: false });
