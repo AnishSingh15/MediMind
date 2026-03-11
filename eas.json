@@ -22,6 +22,14 @@
     },
     "production": {
       "android": {
+        "buildType": "apk"
+      },
+      "ios": {
+        "autoIncrement": true
+      }
+    },
+    "store": {
+      "android": {
         "buildType": "app-bundle"
       },
       "ios": {

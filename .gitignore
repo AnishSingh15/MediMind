@@ -38,4 +38,3 @@ yarn-error.*
 .easignore
 generate_icons.py
 build.log
-GoogleService-Info.plist

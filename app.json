@@ -18,10 +18,11 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
         "NSCameraUsageDescription": "Used for profile photos",
-        "NSPhotoLibraryUsageDescription": "Used for profile photos"
+        "NSPhotoLibraryUsageDescription": "Used for profile photos",
+        "ITSAppUsesNonExemptEncryption": false
       },
       "entitlements": {
-        "com.apple.developer.applesignin": ["Default"]
+        "com.apple.developer.applesignin": ["Default", "Default"]
       }
     },
     "android": {
