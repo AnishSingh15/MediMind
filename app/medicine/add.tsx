@@ -62,7 +62,7 @@ export default function AddMedicineScreen() {
   };
 
   const handleTimeChange = (_event: any, selectedDate?: Date) => {
-    if (Platform.OS === 'android') {
+    if (Platform.OS === "android") {
       // Android: picker closes on select, add time immediately
       setShowTimePicker(false);
       if (selectedDate) {
@@ -180,6 +180,10 @@ export default function AddMedicineScreen() {
         const userId = await AsyncStorage.getItem("@medimind_userId");
         if (userId) {
           const firebaseId = await firebaseAddMedicine(userId, medicineData);
+          // Replace local ID with Firestore ID so they stay in sync
+          await useMedicineStore
+            .getState()
+            .replaceMedicineId(localId, firebaseId);
           console.log("Firebase sync OK, id:", firebaseId);
         } else {
           console.warn("Firebase sync skipped: no userId in AsyncStorage");
@@ -291,18 +295,46 @@ export default function AddMedicineScreen() {
                 onChange={handleTimeChange}
               />
               {Platform.OS === "ios" && (
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 8 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    gap: 12,
+                    marginTop: 8,
+                  }}
+                >
                   <TouchableOpacity
                     onPress={() => setShowTimePicker(false)}
                     style={{ paddingVertical: 8, paddingHorizontal: 16 }}
                   >
-                    <Text style={{ color: Colors.textSecondary, fontSize: 16, fontWeight: '600' }}>Cancel</Text>
+                    <Text
+                      style={{
+                        color: Colors.textSecondary,
+                        fontSize: 16,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Cancel
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={handleConfirmTime}
-                    style={{ paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Colors.primary, borderRadius: BorderRadius.md }}
+                    style={{
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                      backgroundColor: Colors.primary,
+                      borderRadius: BorderRadius.md,
+                    }}
                   >
-                    <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600' }}>Add Time</Text>
+                    <Text
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: 16,
+                        fontWeight: "600",
+                      }}
+                    >
+                      Add Time
+                    </Text>
                   </TouchableOpacity>
                 </View>
               )}
