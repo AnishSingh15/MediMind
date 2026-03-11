@@ -1,5 +1,5 @@
 #!/bin/bash
-# Restore GoogleService-Info.plist from EAS secret before iOS build
+# Restore GoogleService-Info.plist from EAS secret (after install, before expo prebuild)
 DEST="${EAS_BUILD_WORKINGDIR:-$PWD}/GoogleService-Info.plist"
 if [ -n "$GOOGLE_SERVICES_IOS_BASE64" ]; then
   echo "$GOOGLE_SERVICES_IOS_BASE64" | base64 --decode > "$DEST"
