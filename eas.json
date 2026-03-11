@@ -41,9 +41,20 @@
         "simulator": false,
         "distribution": "internal"
       }
+    },
+    "ios-store": {
+      "ios": {
+        "distribution": "store",
+        "autoIncrement": true
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {},
+    "ios-store": {
+      "ios": {
+        "ascAppId": "6760346443"
+      }
+    }
   }
 }
