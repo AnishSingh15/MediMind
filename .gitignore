@@ -38,3 +38,6 @@ yarn-error.*
 .easignore
 generate_icons.py
 build.log
+
+# Firebase iOS config — stored as EAS Secret GOOGLE_SERVICES_IOS_BASE64
+GoogleService-Info.plist
