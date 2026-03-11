@@ -209,13 +209,15 @@ export async function signInAnon(): Promise<string> {
 
 export async function signOut(): Promise<void> {
   const authInstance = getAuthInstance();
-  await firebaseSignOut(authInstance);
+  // Clear local storage BEFORE Firebase sign-out so the auth listener
+  // sees no stored userId and correctly sets isAuthenticated = false
   await AsyncStorage.multiRemove([
     "@medimind_userId",
     "@medimind_userName",
     "@medimind_userPhoto",
     "@medimind_userEmail",
   ]);
+  await firebaseSignOut(authInstance);
 }
 
 export function getCurrentUser(): User | null {
