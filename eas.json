@@ -26,9 +26,6 @@
       },
       "ios": {
         "autoIncrement": true
-      },
-      "buildHooks": {
-        "preInstall": "./eas-hooks/eas-build-pre-install.sh"
       }
     },
     "store": {
@@ -37,18 +34,12 @@
       },
       "ios": {
         "autoIncrement": true
-      },
-      "buildHooks": {
-        "preInstall": "./eas-hooks/eas-build-pre-install.sh"
       }
     },
     "ios-preview": {
       "ios": {
         "simulator": false,
         "distribution": "internal"
-      },
-      "buildHooks": {
-        "preInstall": "./eas-hooks/eas-build-pre-install.sh"
       }
     }
   },
